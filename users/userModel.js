@@ -4,4 +4,16 @@ function findBy(){
     
 }
 
-module.exports = {}
+function add(){
+
+}
+
+function find(){
+
+}
+
+module.exports = {
+    findBy,
+    add,
+    find
+}
