@@ -37,7 +37,7 @@ module.exports = {
     const knexfile = require("../knexfile")
     module.exports = knex(knexfile.development)
 
-## FILE STRUCTURE > index or server file
+## FILE STRUCTURE 1 > index or server file
 - touch server.js
 - server.js > add: 
     const express = require("express")
@@ -56,6 +56,7 @@ module.exports = {
         console.log(`Running at http://localhost:${port}`)
     })
 
+## FILE STRUCTURE 2
 - mkdir welcome && touch welcome/welcomeRouter.js
     > welcomeRouter.js > add : 
         const express = require("express")
@@ -73,3 +74,34 @@ module.exports = {
     users/usersModel.js 
     
 - npm run server
+
+## DESIGN DATA MODEL via white board
+
+- table > User >> id, name, description\*
+
+## MIGRATIONS
+
+- npx knex migrate:make initial
+- npx knex migrate:latest
+- npx knex migrate:rollback
+
+## SEEDS
+
+- npx knex seed:make ___
+- npx knex seed:run
+- npx knex seed:rollback
+
+## User > router & model
+- set up basic structure > 
+    >> Model : 
+        const db = require("../data/config")
+        module.exports = {}
+
+    >> Router :
+        const express = require("express")
+        const Users = require("./userModel")
+        const router = express.Router({
+        mergeParams:true
+        })
+        module.exports = router;
+
