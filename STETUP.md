@@ -67,12 +67,9 @@ module.exports = {
         })
         module.exports = router
 
-- mkdir >  projects, resources, tasks
+- mkdir >  users
 - touch > 
-    projects/projectsRouter.js 
-    projects/projectsModel.js 
-    resources/resourcesRouter.js 
-    resources/resourcesModel.js 
-    tasks/tasksRouter.js 
-    tasks/tasksModel.js
-npm run server
+    users/usersRouter.js 
+    users/usersModel.js 
+    
+- npm run server
