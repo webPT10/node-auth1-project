@@ -1,6 +1,6 @@
 # STEP UP > Authentication Project
 
-## INSTALLS
+## INSTALLS 1
 - npm install
 - PACKAGE.JSON > npm init -y 
     >> Scripts, add:
@@ -104,3 +104,7 @@ module.exports = {
         mergeParams:true
         })
         module.exports = router;
+
+## INSTALLS 2
+- BCRYPTJS > npm i bcryptjs
+
