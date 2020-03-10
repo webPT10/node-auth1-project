@@ -1,4 +1,5 @@
 const express = require("express")
+const bcrypt = require("bcryptjs")
 
 const Users = require("./userModel")
 
@@ -8,8 +9,14 @@ const router = express.Router({
 
 // Creates a user using the information sent inside the body of the request. 
 // Hash the password before saving the user to the database.
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res, next) => {
+    try {
+        const saved = await Users.add(req.body)
+        res.status(201).json(saved)
 
+    } catch(error){
+        next(error)
+    }
 })
 // Use the credentials sent inside the body to authenticate the user. 
 // On successful login, 
@@ -17,8 +24,24 @@ router.post('/register', (req, res) => {
 //     > send back a 'Logged in' message and a cookie that contains the user id. 
 // If login fails, 
 //     > respond with the correct status code and the message: 'You shall not pass!'
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res, next) => {
+    try{
+        const { phoneNumber, password } = req.body
+        const user = await Users.findBy({ phoneNumber }).first()
+        const passwordValid = await bcrypt.compare(password, user.password)
 
+        if(user && passwordValid){
+            res.status(200).json({
+                message: `Hey-o, ${phoneNumber}!`
+            })
+        } else {
+            res.status(401).json({
+                message: "Invalid credentials. The authorities have been alerted."
+            })
+        }
+    } catch(error){
+        next(error)
+    }
 })
 
 // If the user is logged in, 

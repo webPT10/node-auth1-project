@@ -1,25 +1,33 @@
-const db = require("../data/config")
+const db = require("../data/config");
+const bcrypt = require("bcryptjs");
 
-function findBy(id){
-    return db("users")
-        .first()
-        .where({ "projects.id": id })
+function find() {
+  return db("users");
 }
 
-function add(users){
-    return db("users")
-        .insert(users)
-        .then(ids => {
-            return findBy(ids)
-        })
+function findBy(filter) {
+  return db("users")
+    .where(filter)
+    .select("id", "phoneNumber", "password");
 }
 
-function find(){
-    return db("users")
+async function add(users) {
+  users.password = await bcrypt.hash(users.password, 14); // rounds is 2^14 === big number
+
+  const [id] = await db("users").insert(users);
+
+  return findById(id);
+}
+
+function findById(id) {
+  return db("users")
+    .where({ id })
+    .first("id", "phoneNumber");
 }
 
 module.exports = {
-    findBy,
-    add,
-    find
-}
+  find,
+  findBy,
+  add,
+  findById
+};
