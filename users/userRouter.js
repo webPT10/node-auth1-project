@@ -50,26 +50,33 @@ router.post("/login", async (req, res, next) => {
 
 function restricted() {
   const authError = {
-    message: "Invalid credentials!"
+    message: "Credentials Invalid!"
   };
 
   return async (req, res, next) => {
+    console.log("jibberish");
     try {
-      const { phoneNumber, password } = req.headers;
-      if (!phoneNumber || !password) {
+      const { phonenumber, password } = req.headers;
+      console.log(phonenumber, password, req.headers);
+      // make sure values are not empty
+      if (!phonenumber || !password) {
         return res.status(401).json(authError);
       }
+      console.log("cp 1");
 
-      const user = await Users.findBy({ phoneNumber }).first();
+      const user = await Users.findBy({ phoneNumber: phonenumber }).first();
+      // make sure the user exists
       if (!user) {
         return res.status(401).json(authError);
       }
+      console.log("cp 2");
 
       const passwordValid = await bcrypt.compare(password, user.password);
+      // make sure password is correct
       if (!passwordValid) {
         return res.status(401).json(authError);
       }
-
+      console.log("cp 3");
       // if we reach this point, the user is authenticated!
       next();
     } catch (error) {
