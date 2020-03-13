@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 
 const Users = require("./userModel");
+const restrict = require("../middleware/restrict")
 
 const router = express.Router({
   mergeParams: true
@@ -48,44 +49,8 @@ router.post("/login", async (req, res, next) => {
 // If the user is not logged in,
 //     > repond with the correct status code and the message: 'You shall not pass!'.
 
-function restricted() {
-  const authError = {
-    message: "Credentials Invalid!"
-  };
 
-  return async (req, res, next) => {
-    console.log("jibberish");
-    try {
-      const { phonenumber, password } = req.headers;
-      console.log(phonenumber, password, req.headers);
-      // make sure values are not empty
-      if (!phonenumber || !password) {
-        return res.status(401).json(authError);
-      }
-      console.log("cp 1");
-
-      const user = await Users.findBy({ phoneNumber: phonenumber }).first();
-      // make sure the user exists
-      if (!user) {
-        return res.status(401).json(authError);
-      }
-      console.log("cp 2");
-
-      const passwordValid = await bcrypt.compare(password, user.password);
-      // make sure password is correct
-      if (!passwordValid) {
-        return res.status(401).json(authError);
-      }
-      console.log("cp 3");
-      // if we reach this point, the user is authenticated!
-      next();
-    } catch (error) {
-      next(error);
-    }
-  };
-}
-
-router.get("/users", restricted(), async (req, res, next) => {
+router.get("/users", restrict(), async (req, res, next) => {
   try {
     const users = await Users.find();
     res.json(users);
