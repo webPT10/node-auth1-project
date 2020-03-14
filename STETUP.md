@@ -108,3 +108,44 @@ module.exports = {
 ## INSTALLS 2
 - BCRYPTJS > npm i bcryptjs
 
+## EXPRESS-SESSIONS
+> in restrict.js >> 
+    - const sessions = { }
+    - module.exports = {sessions,restrict};
+
+> import into router 
+    - const { sessions, restrict } = require("PATH")
+
+> see restrict.js > line 16-19
+    const { authorization } = req.headers
+      if(!sessions[authorization]) {
+        return res.status(401).json(authError)
+      }
+
+> userRouter.sj 
+    const authToken = Math.random();
+    sessions[authToken] = user.id;
+
+    res.setHeader("Authorization", authToken);
+
+## COOKIES
+- userRouter.js
+   > remove: // res.setHeader("Authorization", authToken);
+   > update to:  res.setHeader("Set-Cookie", `token=${authToken}; Path=/`);
+   > re-places the Authorization with Cookie
+
+- restrict.js
+    > remove // const { authorization } = req.headers if(!sessions[authorization]) {return          // res.status(401).json(authError)}
+    > update to: 
+    const { cookie } = req.headers
+      if(!cookie){
+        return res.status(401).json(authError)
+      }
+
+    const authToken = cookie.replace("token=", "")
+      if(!sessions[authToken]){
+        return res.status(401).json(authError)
+      }
+
+
+
