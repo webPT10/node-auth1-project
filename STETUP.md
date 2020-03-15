@@ -109,6 +109,8 @@ module.exports = {
 - BCRYPTJS > npm i bcryptjs
 
 ## EXPRESS-SESSIONS
+> npm install express-session
+
 > in restrict.js >> 
     - const sessions = { }
     - module.exports = {sessions,restrict};
