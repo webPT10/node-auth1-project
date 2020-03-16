@@ -66,8 +66,15 @@ router.get("/users", restrict(), async (req, res, next) => {
 });
 
 router.get("/logout", restrict(), (req, res, next) => {
-  // destroy the session here
-  res.end();
+  req.session.destroy((error) => {
+    if (error){
+      next(error)
+    } else {
+      res.json({
+        message: "Successfully logged out",
+      })
+    }
+  })
 });
 
 module.exports = router;

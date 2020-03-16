@@ -178,6 +178,16 @@ https://www.npmjs.com/package/express-session
 
 ## INSTALL > connect-session-knex
 - npm install connect-session-knex
+- import to server.js >> 
+    const KnexSessionStore = require("connect-session-knex")(session)
+- add to server.use(session(store: new KnexSessionStore({
+      createTable: true, // if session table doesn't exist, create it automatically
+      knex: dbConfig //configured instance of knex
+    }))
+
+## INSTALL > dotnev
+- npm install dotenv --save-dev
+
 
 
 

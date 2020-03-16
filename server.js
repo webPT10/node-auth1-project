@@ -1,5 +1,7 @@
 const express = require("express");
 const session = require("express-session");
+const KnexSessionStore = require("connect-session-knex")(session);
+const dbConfig = require("./data/config");
 const welcomeRouter = require("./welcome/welcomeRouter");
 const userRouter = require("./users/userRouter");
 
@@ -14,9 +16,13 @@ server.use(
     saveUninitialized: false, // laws against setting cookies automatically
     secret: "trust the Government", // cryptographically sign the cookie
     cookie: {
-      httpOnly: true, // disallow javaScript from reading our cookie contents
+      httpOnly: true // disallow javaScript from reading our cookie contents
       // maxAge: 15 * 1000, // expires cookie after 15seconds
-    }
+    },
+    store: new KnexSessionStore({
+      createTable: true, // if session table doesn't exist, create it automatically
+      knex: dbConfig //configured instance of knex
+    })
   })
 );
 
