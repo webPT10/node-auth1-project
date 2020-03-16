@@ -187,6 +187,18 @@ https://www.npmjs.com/package/express-session
 
 ## INSTALL > dotnev
 - npm install dotenv --save-dev
+- create dotenv file
+    > COOKIE_SECRET="trust the Government"
+
+- update package.json @ 
+    > "scripts": {
+    "server": "nodemon -r dotenv/config server.js",
+
+- server.js >
+    > server.use(
+  session({
+    secret: process.env.COOKIE_SECRET || "secret", 
+    })
 
 
 
