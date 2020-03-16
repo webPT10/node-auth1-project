@@ -109,26 +109,48 @@ module.exports = {
 - BCRYPTJS > npm i bcryptjs
 
 ## EXPRESS-SESSIONS
+https://www.npmjs.com/package/express-session
+
 > npm install express-session
+    >> this is just Middleware
+
+> server.js
+    - const session = require("express-session")
+
+    -server.use(session({
+        name: "token", // overwrites the default cookie name + hides stack better
+        resave: false, // avoids recreating sessions that have not changed
+        saveUninitialized: false, // laws against setting cookies automatically 
+        secret: "trust the Government" // cryptographically sign the cookie
+        cookie: {
+            httpOnly: true, // disallow javaScript from reading our cookie contents
+            maxAge: 15 * 1000, // expires cookie after 15seconds
+        }
+    }))
+
 
 > in restrict.js >> 
     - const sessions = { }
     - module.exports = {sessions,restrict};
 
-> import into router 
+> 1 import into router 
     - const { sessions, restrict } = require("PATH")
 
-> see restrict.js > line 16-19
+> 2 see restrict.js > line 16-19
     const { authorization } = req.headers
       if(!sessions[authorization]) {
         return res.status(401).json(authError)
       }
 
-> userRouter.sj 
+> 3 userRouter.sj 
     const authToken = Math.random();
     sessions[authToken] = user.id;
 
     res.setHeader("Authorization", authToken);
+
+
+> #3 above not needed now, can use instead: 
+    - req.session.user = user
 
 ## COOKIES
 - userRouter.js
@@ -148,6 +170,15 @@ module.exports = {
       if(!sessions[authToken]){
         return res.status(401).json(authError)
       }
+    
+    >>> UPDATE to:
+        if (!req.session || !req.session.user) {
+        return res.status(401).json(authError)
+      }
+
+## INSTALL > connect-session-knex
+- npm install connect-session-knex
+
 
 
 

@@ -1,9 +1,7 @@
 const bcrypt = require("bcryptjs");
 const Users = require("../users/userModel");
 
-const sessions = {
-
-}
+const sessions = {};
 
 function restrict() {
   const authError = {
@@ -21,14 +19,18 @@ function restrict() {
       //   return res.status(401).json(authError)
       // }
 
-      const { cookie } = req.headers
-      if(!cookie){
-        return res.status(401).json(authError)
-      }
+      // const { cookie } = req.headers
+      // if(!cookie){
+      //   return res.status(401).json(authError)
+      // }
 
-      const authToken = cookie.replace("token=", "")
-      if(!sessions[authToken]){
-        return res.status(401).json(authError)
+      // const authToken = cookie.replace("token=", "")
+      // if(!sessions[authToken]){
+      //   return res.status(401).json(authError)
+      // }
+
+      if (!req.session || !req.session.user) {
+        return res.status(401).json(authError);
       }
 
       next();
@@ -43,16 +45,16 @@ module.exports = {
 };
 
 // const { phonenumber, password } = req.headers;
-      // if (!phonenumber || !password) {
-      //   return res.status(401).json(authError);
-      // }
+// if (!phonenumber || !password) {
+//   return res.status(401).json(authError);
+// }
 
-      // const user = await Users.findBy({ phonenumber }).first();
-      // if (!user) {
-      //   return res.status(401).json(authError);
-      // }
+// const user = await Users.findBy({ phonenumber }).first();
+// if (!user) {
+//   return res.status(401).json(authError);
+// }
 
-      // const passwordValid = await bcrypt.compare(password, user.password);
-      // if (!passwordValid) {
-      //   return res.status(401).json(authError);
-      // }
+// const passwordValid = await bcrypt.compare(password, user.password);
+// if (!passwordValid) {
+//   return res.status(401).json(authError);
+// }

@@ -35,11 +35,13 @@ router.post("/login", async (req, res, next) => {
         message: `Invalid credentials. The authorities have been alerted.`
       });
     }
-    const authToken = Math.random();
-    sessions[authToken] = user.id;
+    // const authToken = Math.random();
+    // sessions[authToken] = user.id;
 
-    // res.setHeader("Authorization", authToken);
-    res.setHeader("Set-Cookie", `token=${authToken}; Path=/`);
+    // // res.setHeader("Authorization", authToken);
+    // res.setHeader("Set-Cookie", `token=${authToken}; Path=/`);
+
+    req.session.user = user;
 
     res.json({
       message: `Welcome, ${user.phoneNumber}`

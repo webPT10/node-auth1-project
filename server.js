@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require("express-session");
 const welcomeRouter = require("./welcome/welcomeRouter");
 const userRouter = require("./users/userRouter");
 
@@ -6,6 +7,18 @@ const server = express();
 const port = process.env.PORT || 4400;
 
 server.use(express.json());
+server.use(
+  session({
+    name: "token", // overwrites the default cookie name + hides stack better
+    resave: false, // avoids recreating sessions that have not changed
+    saveUninitialized: false, // laws against setting cookies automatically
+    secret: "trust the Government", // cryptographically sign the cookie
+    cookie: {
+      httpOnly: true, // disallow javaScript from reading our cookie contents
+      // maxAge: 15 * 1000, // expires cookie after 15seconds
+    }
+  })
+);
 
 server.use("/", welcomeRouter);
 server.use("/api", userRouter);
